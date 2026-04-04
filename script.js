@@ -1,30 +1,46 @@
-const micBtn = document.getElementById('mic-btn');
-const display = document.getElementById('display');
-const stepsDiv = document.getElementById('steps');
-const resultDiv = document.getElementById('result');
-
-// Web Speech API setup
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-
-recognition.onstart = () => {
-    micBtn.innerText = "Listening...";
-};
-
-recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    processCalculation(transcript);
-    micBtn.innerText = "🎤 Start Speaking";
-};
-
 function processCalculation(query) {
-    // Abhi ke liye hum sirf screen par dikhayenge ki user ne kya bola
-    stepsDiv.innerText = "Aapne pucha: " + query;
-    
-    // Yahan hum AI logic lagayenge jo "1999 ka 3 percent" ko calculate karega
-    // Iska logic main aapko next step mein dunga!
+    const input = query.toLowerCase();
+    stepsDiv.innerHTML = ""; // Purane steps clear karein
+    resultDiv.innerHTML = "Calculating...";
+
+    // 1. Percentage Logic (Check: "1999 ka 3 percent")
+    if (input.includes("percent") || input.includes("%") || input.includes("pratishat")) {
+        
+        // Numbers nikalne ke liye (Regex ka use)
+        const numbers = input.match(/\d+/g); 
+
+        if (numbers && numbers.length >= 2) {
+            let amount = parseFloat(numbers[0]);
+            let percent = parseFloat(numbers[1]);
+            
+            // Calculation
+            let finalResult = (amount * percent) / 100;
+
+            // Visual Steps Dikhana
+            setTimeout(() => {
+                stepsDiv.innerHTML = `
+                    <b>Step 1:</b> Amount liya = ${amount}<br>
+                    <b>Step 2:</b> Percentage liya = ${percent}%<br>
+                    <b>Step 3:</b> Formula: (${amount} × ${percent}) ÷ 100
+                `;
+                resultDiv.innerText = "Final Result: " + finalResult.toFixed(2);
+                
+                // Voice Output (AI Bolega bhi)
+                speak(`Iska jawab hai ${finalResult.toFixed(2)}`);
+            }, 800);
+        } else {
+            resultDiv.innerText = "Samajh nahi aaya. Dubara boliye?";
+        }
+    } 
+    // Aap yahan Plus, Minus ke aur logics bhi add kar sakte hain
+    else {
+        resultDiv.innerText = "Abhi main sirf percentage samajhta hoon!";
+    }
 }
 
-micBtn.addEventListener('click', () => {
-    recognition.start();
-});
+// AI Voice function
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'hi-IN'; // Hindi voice
+    window.speechSynthesis.speak(utterance);
+}
