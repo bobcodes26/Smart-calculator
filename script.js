@@ -44,3 +44,21 @@ function speak(text) {
     utterance.lang = 'hi-IN'; // Hindi voice
     window.speechSynthesis.speak(utterance);
 }
+// Mic Button ko function se connect karna
+micBtn.addEventListener('click', function() {
+    try {
+        recognition.start();
+    } catch (err) {
+        console.log("Recognition already started or error: ", err);
+    }
+});
+
+// Mobile users ke liye fast touch support
+micBtn.addEventListener('touchstart', function(e) {
+    e.preventDefault(); 
+    try {
+        recognition.start();
+    } catch (err) {
+        console.log("Error: ", err);
+    }
+});
