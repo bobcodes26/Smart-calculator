@@ -1,0 +1,54 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.display-box {
+    background: #1a1a1a;
+    color: #00ff00;
+    padding: 20px;
+    border-radius: 15px;
+    min-height: 150px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.steps { color: #aaa; font-size: 0.9rem; margin-bottom: 10px; }
+.result { font-size: 2rem; font-weight: bold; }
+
+#mic-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+#mic-btn:hover { background: #e84118; }
+
+#type-input {
+    width: 93%;
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
