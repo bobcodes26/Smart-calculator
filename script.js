@@ -1,12 +1,11 @@
 let currentInput = "";
-const micBtn = document.getElementById('mic-btn');
 const expDiv = document.getElementById('displayExpression');
 const resDiv = document.getElementById('displayResult');
 
-// --- Manual Buttons Logic ---
 function appendInput(val) {
+    if (currentInput === "0") currentInput = "";
     currentInput += val;
-    expDiv.innerText = currentInput;
+    expDiv.innerText = currentInput.replace(/\*/g, '×').replace(/\//g, '÷');
 }
 
 function clearDisplay() {
@@ -22,41 +21,11 @@ function backspace() {
 
 function calculate() {
     try {
-        let result = eval(currentInput);
+        // eval se pehle math symbols ko replace karte hain
+        let sanitizedInput = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
+        let result = eval(sanitizedInput);
         resDiv.innerText = Number.isInteger(result) ? result : result.toFixed(2);
     } catch (e) {
         resDiv.innerText = "Error";
     }
-}
-
-// --- AI Voice Logic ---
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'hi-IN';
-
-    recognition.onstart = () => micBtn.classList.add('listening');
-    recognition.onend = () => micBtn.classList.remove('listening');
-
-    recognition.onresult = (event) => {
-        const query = event.results[0][0].transcript.toLowerCase();
-        expDiv.innerText = query;
-        
-        // Voice Percentage Logic: "500 ka 10 percent"
-        const nums = query.match(/\d+/g);
-        if (nums && nums.length >= 2) {
-            let n1 = parseFloat(nums[0]);
-            let n2 = parseFloat(nums[1]);
-            let finalRes = (n1 * n2) / 100;
-            resDiv.innerText = finalRes.toFixed(2);
-            
-            // Voice Answer
-            let speak = new SpeechSynthesisUtterance(`Jawab hai ${finalRes}`);
-            speak.lang = 'hi-IN';
-            window.speechSynthesis.speak(speak);
-        }
-    };
-
-    micBtn.addEventListener('click', () => recognition.start());
-    micBtn.addEventListener('touchstart', (e) => { e.preventDefault(); recognition.start(); });
 }
