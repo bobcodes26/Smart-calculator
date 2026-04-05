@@ -1,61 +1,62 @@
+let currentInput = "";
 const micBtn = document.getElementById('mic-btn');
-const displayResult = document.getElementById('displayResult');
-const displaySteps = document.getElementById('displaySteps');
-const statusText = document.getElementById('status-text');
+const expDiv = document.getElementById('displayExpression');
+const resDiv = document.getElementById('displayResult');
 
+// --- Manual Buttons Logic ---
+function appendInput(val) {
+    currentInput += val;
+    expDiv.innerText = currentInput;
+}
+
+function clearDisplay() {
+    currentInput = "";
+    expDiv.innerText = "0";
+    resDiv.innerText = "0.00";
+}
+
+function backspace() {
+    currentInput = currentInput.slice(0, -1);
+    expDiv.innerText = currentInput || "0";
+}
+
+function calculate() {
+    try {
+        let result = eval(currentInput);
+        resDiv.innerText = Number.isInteger(result) ? result : result.toFixed(2);
+    } catch (e) {
+        resDiv.innerText = "Error";
+    }
+}
+
+// --- AI Voice Logic ---
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-if (!SpeechRecognition) {
-    alert("Voice support not available!");
-} else {
+if (SpeechRecognition) {
     const recognition = new SpeechRecognition();
     recognition.lang = 'hi-IN';
 
-    recognition.onstart = () => {
-        micBtn.classList.add('listening');
-        statusText.innerText = "Listening...";
-    };
-
-    recognition.onend = () => {
-        micBtn.classList.remove('listening');
-        statusText.innerText = "Tap to Calculate";
-    };
+    recognition.onstart = () => micBtn.classList.add('listening');
+    recognition.onend = () => micBtn.classList.remove('listening');
 
     recognition.onresult = (event) => {
-        const query = event.results[0][0].transcript;
-        processAI(query);
-    };
-
-    const toggleMic = (e) => {
-        e.preventDefault();
-        recognition.start();
-    };
-
-    micBtn.addEventListener('click', toggleMic);
-    micBtn.addEventListener('touchstart', toggleMic);
-}
-
-function processAI(query) {
-    displaySteps.innerText = query;
-    const numbers = query.match(/\d+/g);
-
-    if (numbers && numbers.length >= 2) {
-        let n1 = parseFloat(numbers[0]);
-        let n2 = parseFloat(numbers[1]);
-        let result = 0;
-
-        if (query.includes("percent") || query.includes("%") || query.includes("ka")) {
-            result = (n1 * n2) / 100;
-        }
-
-        displayResult.innerText = result.toFixed(2);
+        const query = event.results[0][0].transcript.toLowerCase();
+        expDiv.innerText = query;
         
-        // Voice response
-        const msg = new SpeechSynthesisUtterance(`Iska jawab hai ${result.toFixed(2)}`);
-        msg.lang = 'hi-IN';
-        window.speechSynthesis.speak(msg);
-    } else {
-        displayResult.innerText = "Error";
-        statusText.innerText = "Try: 2000 ka 5 percent";
-    }
+        // Voice Percentage Logic: "500 ka 10 percent"
+        const nums = query.match(/\d+/g);
+        if (nums && nums.length >= 2) {
+            let n1 = parseFloat(nums[0]);
+            let n2 = parseFloat(nums[1]);
+            let finalRes = (n1 * n2) / 100;
+            resDiv.innerText = finalRes.toFixed(2);
+            
+            // Voice Answer
+            let speak = new SpeechSynthesisUtterance(`Jawab hai ${finalRes}`);
+            speak.lang = 'hi-IN';
+            window.speechSynthesis.speak(speak);
+        }
+    };
+
+    micBtn.addEventListener('click', () => recognition.start());
+    micBtn.addEventListener('touchstart', (e) => { e.preventDefault(); recognition.start(); });
 }
