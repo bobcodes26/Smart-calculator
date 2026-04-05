@@ -1,3 +1,34 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0a0a14;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    height: 100vh; /* Pura screen cover karne ke liye */
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Scroll bar hatane ke liye */
+}
+
+.app-shell {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: none; /* Mobile par full width chahiye */
+    padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+    box-sizing: border-box;
+}
+
+/* Isse display panel upar set ho jayega aur mic center mein */
+.main-content {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 :root {
     --primary: #00d2ff;
     --accent: #ff4757;
