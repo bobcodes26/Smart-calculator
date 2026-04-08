@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Portfolio</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; color: #333; }
+header { background: #f4f4f4; padding: 2rem; text-align: center; }
+nav { display: flex; justify-content: center; gap: 20px; padding: 1rem; background: #333; color: white; }
+section { padding: 2rem; max-width: 800px; margin: auto; }
+.project { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; }
+footer { text-align: center; padding: 1rem; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<header>
+<h1>John Doe</h1>
+<p>Professional Software Engineer</p>
+</header>
+<nav>
+<a href="#about" style="color:white;">About</a>
+<a href="#projects" style="color:white;">Projects</a>
+<a href="#contact" style="color:white;">Contact</a>
+</nav>
+<section id="about">
+<h2>About Me</h2>
+<p>Dedicated professional with expertise in building scalable web applications and delivering high-quality software solutions.</p>
+</section>
+<section id="projects">
+<h2>Projects</h2>
+<div class="project">
+<h3>Project Alpha</h3>
+<p>An enterprise-level dashboard built with React and Node.js to optimize data visualization.</p>
+</div>
+<div class="project">
+<h3>Project Beta</h3>
+<p>A secure API integration platform designed for high-frequency financial transactions.</p>
+</div>
+</section>
+<section id="contact">
+<h2>Contact</h2>
+<p>Email: contact@johndoe.com</p>
+</section>
+<footer>
+<p>&copy; 2023 John Doe. All rights reserved.</p>
+</footer>
+</body>
+</html>
